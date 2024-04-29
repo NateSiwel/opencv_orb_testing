@@ -1,5 +1,6 @@
 import cv2
 from display import Display
+import numpy as np
 
 vid = cv2.VideoCapture(-1)
 vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
@@ -12,8 +13,9 @@ class FeatureExtractor:
 
     def extract(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        kp = orb.detect(gray, None)
-        self.kp, self.des = orb.compute(gray, kp)
+        corners = cv2.goodFeaturesToTrack(gray, 3000, qualityLevel=0.01, minDistance=10)
+        corners = np.intp(corners)
+        self.corners = corners
 
 def main():
     display = Display()
@@ -22,7 +24,7 @@ def main():
     while True:
         ret, frame = vid.read()
         orb.extract(frame)
-        frame = display.draw_keypoints(frame, orb.kp)
+        frame = display.draw_keypoints(frame, orb.corners)
 
         display.show(frame)
 
