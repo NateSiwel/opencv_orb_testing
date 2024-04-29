@@ -6,16 +6,23 @@ vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
 
 orb = cv2.ORB_create()
 
+class FeatureExtractor:
+    def __init__(self):
+        self.orb = cv2.ORB_create()
+
+    def extract(self, frame):
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        kp = orb.detect(gray, None)
+        self.kp, self.des = orb.compute(gray, kp)
+
 def main():
     display = Display()
+    orb = FeatureExtractor()
 
     while True:
         ret, frame = vid.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        kp = orb.detect(gray, None)
-        kp, des = orb.compute(gray, kp)
-
-        frame = display.draw_keypoints(frame, kp)
+        orb.extract(frame)
+        frame = display.draw_keypoints(frame, orb.kp)
 
         display.show(frame)
 
