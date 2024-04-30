@@ -1,2 +1,3 @@
-** plots opencv orbs on corners 
-** plots how objects move across screen using matches
+- plots opencv orbs on corners 
+- plots how objects move across screen using matches
+- testing is done video "https://www.youtube.com/watch?v=WuZzga561bU&ab_channel=DouglasT."
