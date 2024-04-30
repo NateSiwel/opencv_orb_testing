@@ -9,10 +9,8 @@ class Display(object):
     def show(self, frame):
         cv2.imshow(self.window_name, frame)
 
-    def draw_keypoints(self, frame, corners ):
-        for i in corners:
-            x,y = i.ravel()
-            cv2.circle(frame,(x,y),3,255,-1)
+    def draw_keypoints(self, frame, kps ):
+        frame = cv2.drawKeypoints(frame, kps, 0, color=(255,0,255), flags=0)
 
         return frame 
 

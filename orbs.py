@@ -6,16 +6,37 @@ from featureExtractor import FeatureExtractor
 vid = cv2.VideoCapture(-1)
 vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
 
-orb = cv2.ORB_create()
-def main():
-    display = Display()
-    orb = FeatureExtractor()
+display = Display()
+orb = FeatureExtractor()
 
+
+
+def process_frame(frame):
+    matches = orb.extract(frame)
+    if matches is None:
+        print("matches is none... returning")
+        return frame 
+    last = orb.last 
+    kps = last['kps']
+    des = last['des']
+
+    if kps is not None:
+        print("drawing keypoints")
+        frame = display.draw_keypoints(frame, kps)
+    
+    if matches is not None:
+        for m in matches:
+            print(m)
+
+    return frame
+
+
+def main():
     while True:
         ret, frame = vid.read()
-        orb.extract(frame)
-        frame = display.draw_keypoints(frame, orb.corners)
 
+        frame = process_frame(frame)
+        
         display.show(frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
