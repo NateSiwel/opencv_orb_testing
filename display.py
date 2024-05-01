@@ -17,10 +17,10 @@ class Display(object):
             current_point = current_coords[i]
             old_point = old_coords[i]
 
-            current_x = int(current_point.pt[0])
-            current_y = int(current_point.pt[1])
-            old_x = int(old_point.pt[0])
-            old_y = int(old_point.pt[1])
+            current_x = int(current_point[0])
+            current_y = int(current_point[1])
+            old_x = int(old_point[0])
+            old_y = int(old_point[1])
 
             cv2.line(frame, (current_x, current_y), (old_x, old_y), color=(0, 255, 0), thickness=2)
 

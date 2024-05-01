@@ -1,4 +1,10 @@
 import cv2
+import numpy as np
+from skimage import data
+from skimage.color import rgb2gray
+from skimage.feature import match_descriptors, ORB, plot_matches
+from skimage.measure import ransac
+from skimage.transform import FundamentalMatrixTransform
 
 class FeatureExtractor:
     def __init__(self):
@@ -26,10 +32,25 @@ class FeatureExtractor:
             good = []
             for m,n in matches:
                 if m.distance < 0.65*n.distance:
-                    good.append((kps[m.queryIdx], self.last['kps'][m.trainIdx]))
+                    good.append((kps[m.queryIdx].pt, self.last['kps'][m.trainIdx].pt))
 
             matches = good
+            matches = np.array(matches)
+            
+            try: 
+                #work in progress
+                model, inliers = ransac(
+                    (matches[:, 0],matches[:, 1]),
+                    FundamentalMatrixTransform,
+                    min_samples=8,
+                    residual_threshold=1,
+                    max_trials=100,
+                )
 
+                matches = matches[inliers]
+
+            except ValueError as e:
+                print(f"error: {str(e)}")
         self.last = {'kps':kps, 'des':des}
        
         return matches 
