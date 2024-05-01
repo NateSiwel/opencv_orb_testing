@@ -2,7 +2,8 @@ import cv2
 from display import Display
 from featureExtractor import FeatureExtractor 
 
-vid = cv2.VideoCapture(-1)
+#vid = cv2.VideoCapture(-1)
+vid = cv2.VideoCapture('driving.mp4')
 vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
 
 display = Display()
